@@ -1,5 +1,7 @@
 package com.cursos.andemar.cursos;
 
+import com.cursos.andemar.cursos.bean.MyBean;
+import com.cursos.andemar.cursos.bean.MyBeanWithDependency;
 import com.cursos.andemar.cursos.component.ComponentDependency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,9 +13,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CursosApplication implements CommandLineRunner {
 
 	private ComponentDependency componentDependency;
+	private MyBean myBean;
+	private MyBeanWithDependency myBeanWithDependency;
 
-	public CursosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency) {
+	public CursosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency,
+							 MyBean myBean,
+							 MyBeanWithDependency myBeanWithDependency) {
 		this.componentDependency = componentDependency;
+		this.myBean = myBean;
+		this.myBeanWithDependency = myBeanWithDependency;
 	}
 
 	public static void main(String[] args) {
@@ -23,5 +31,7 @@ public class CursosApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		componentDependency.saludar();
+		myBean.print();
+		myBeanWithDependency.printWithDependency();
 	}
 }
