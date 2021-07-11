@@ -1,9 +1,11 @@
 package com.cursos.andemar.cursos.repository;
 
+import com.cursos.andemar.cursos.dto.UserDTO;
 import com.cursos.andemar.cursos.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -35,5 +37,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByNameLikeOrderByIdDesc(String name);
 
     List<User> findByNameContainingOrderByIdDesc(String name);
+
+    @Query("SELECT new com.cursos.andemar.cursos.dto.UserDTO(u.id, u.name, u.birthDate)" +
+            " FROM User u " +
+            " WHERE u.birthDate=:parametroFecha" +
+            " AND u.email=:parametroEmail")
+    Optional<UserDTO> getAllByBiAndBirthDateAndEmail(@Param("parametroFecha") LocalDate date,
+                                                     @Param("parametroEmail") String email);
 
 }

@@ -107,10 +107,13 @@ public class CursosApplication implements CommandLineRunner {
 			.forEach(user -> LOGGER.info("Usuario findByBirthDateBetween " + user));
 
 		userRepository.findByNameLikeOrderByIdDesc("%Sinon%")
-				.forEach(user -> LOGGER.info("Usuario findByNameLikeOrderByIdDesc: " + user));*/
+				.forEach(user -> LOGGER.info("Usuario findByNameLikeOrderByIdDesc: " + user));
 
 		userRepository.findByNameContainingOrderByIdDesc("Sinon")
-				.forEach(user -> LOGGER.info("Usuario findByNameContainingOrderByIdDesc: " + user));
+				.forEach(user -> LOGGER.info("Usuario findByNameContainingOrderByIdDesc: " + user));*/
+
+		userRepository.getAllByBiAndBirthDateAndEmail(LocalDate.of(2020, 12, 20), "test@Alice.com")
+			.ifPresent(user -> LOGGER.info("Usuario getAllByBiAndBirthDateAndEmail: " + user));
 	}
 
 
