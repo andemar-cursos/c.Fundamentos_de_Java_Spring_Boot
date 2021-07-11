@@ -5,7 +5,9 @@ import com.cursos.andemar.cursos.bean.MyBeanWithDependency;
 import com.cursos.andemar.cursos.bean.MyBeanWithProperties;
 import com.cursos.andemar.cursos.bean.MyBeanWithPropertiesImplement;
 import com.cursos.andemar.cursos.component.ComponentDependency;
+import com.cursos.andemar.cursos.entity.User;
 import com.cursos.andemar.cursos.pojo.UserPojo;
+import com.cursos.andemar.cursos.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class CursosApplication implements CommandLineRunner {
@@ -24,17 +30,20 @@ public class CursosApplication implements CommandLineRunner {
 	private MyBeanWithDependency myBeanWithDependency;
 	private MyBeanWithProperties myBeanWithProperties;
 	private UserPojo userPojo;
+	private UserRepository userRepository;
 
 	public CursosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency,
 							 MyBean myBean,
 							 MyBeanWithDependency myBeanWithDependency,
 							 MyBeanWithProperties myBeanWithProperties,
-							 UserPojo userPojo) {
+							 UserPojo userPojo,
+							 UserRepository userRepository) {
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
+		this.userRepository = userRepository;
 
 	}
 
@@ -44,6 +53,30 @@ public class CursosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+//		clasesAnteriores();
+
+		saveUserInDataBase();
+
+	}
+
+	private void saveUserInDataBase() {
+		User user1 = new User("Andemar", "test@andemar.com", LocalDate.of(2021, 03, 1));
+		User user2 = new User("Mashiro", "test@mashiro.com", LocalDate.of(2020, 03, 23));
+		User user3 = new User("Ran", "test@Ran.com", LocalDate.of(2020, 07, 20));
+		User user4 = new User("Rena", "test@Rena.com", LocalDate.of(2020, 06, 12));
+		User user5 = new User("Nagisa", "test@Nagisa.com", LocalDate.of(2020, 03, 30));
+		User user6 = new User("Asuna", "test@Asuna.com", LocalDate.of(2020, 03, 20));
+		User user7 = new User("Sinon", "test@Sinon.com", LocalDate.of(2020, 01, 20));
+		User user8 = new User("Alice", "test@Alice.com", LocalDate.of(2020, 12, 20));
+		User user9 = new User("Tyese", "test@Tyese.com", LocalDate.of(2020, 11, 20));
+
+		List<User> list = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9);
+
+		list.stream().forEach(userRepository::save);
+	}
+
+
+	public void clasesAnteriores() {
 		componentDependency.saludar();
 		myBean.print();
 		myBeanWithDependency.printWithDependency();
