@@ -8,6 +8,7 @@ import com.cursos.andemar.cursos.component.ComponentDependency;
 import com.cursos.andemar.cursos.entity.User;
 import com.cursos.andemar.cursos.pojo.UserPojo;
 import com.cursos.andemar.cursos.repository.UserRepository;
+import com.cursos.andemar.cursos.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tomcat.jni.Local;
@@ -33,19 +34,22 @@ public class CursosApplication implements CommandLineRunner {
 	private MyBeanWithProperties myBeanWithProperties;
 	private UserPojo userPojo;
 	private UserRepository userRepository;
+	private UserService userService;
 
 	public CursosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency,
 							 MyBean myBean,
 							 MyBeanWithDependency myBeanWithDependency,
 							 MyBeanWithProperties myBeanWithProperties,
 							 UserPojo userPojo,
-							 UserRepository userRepository) {
+							 UserRepository userRepository,
+						     UserService userService) {
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 
 	}
 
@@ -57,9 +61,25 @@ public class CursosApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 //		clasesAnteriores();
 
-		saveUserInDataBase();
-		getInformationJpqlFromUser();
+//		saveUserInDataBase();
+//		getInformationJpqlFromUser();
+		saveWithErrorTransactional();
 
+	}
+
+	private void saveWithErrorTransactional(){
+
+		User test1 = new User("TestTransactional1", "TestTransactional1@test.com", LocalDate.now());
+		User test2 = new User("TestTransactional2", "TestTransactional2@test.com", LocalDate.now());
+		User test3 = new User("TestTransactional3", "TestTransactional3@test.com", LocalDate.now());
+		User test4 = new User("TestTransactional4", "TestTransactional4@test.com", LocalDate.now());
+
+		List<User> users = List.of(test1, test2, test3, test4);
+
+		userService.saveTransactional(users);
+
+		userService.getAllUsers()
+			.forEach(user -> LOGGER.info("Este es el usuario dentro del metodo transaccional: " + user));
 	}
 
 	private void getInformationJpqlFromUser() {
@@ -110,10 +130,10 @@ public class CursosApplication implements CommandLineRunner {
 				.forEach(user -> LOGGER.info("Usuario findByNameLikeOrderByIdDesc: " + user));
 
 		userRepository.findByNameContainingOrderByIdDesc("Sinon")
-				.forEach(user -> LOGGER.info("Usuario findByNameContainingOrderByIdDesc: " + user));*/
+				.forEach(user -> LOGGER.info("Usuario findByNameContainingOrderByIdDesc: " + user));
 
 		userRepository.getAllByBiAndBirthDateAndEmail(LocalDate.of(2020, 12, 20), "test@Alice.com")
-			.ifPresent(user -> LOGGER.info("Usuario getAllByBiAndBirthDateAndEmail: " + user));
+			.ifPresent(user -> LOGGER.info("Usuario getAllByBiAndBirthDateAndEmail: " + user));*/
 	}
 
 
