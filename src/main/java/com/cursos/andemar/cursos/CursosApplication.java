@@ -85,6 +85,12 @@ public class CursosApplication implements CommandLineRunner {
 		List<User> list = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9);
 
 		list.stream().forEach(userRepository::save);
+
+		userRepository.findByName("Andemar")
+			.forEach(user -> LOGGER.info("Usuario con query method: " + user));
+
+		userRepository.findByEmailAndName("test@mashiro.com", "Mashiro")
+				.ifPresent(LOGGER::info);
 	}
 
 
