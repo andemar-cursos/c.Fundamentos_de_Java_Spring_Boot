@@ -71,12 +71,17 @@ public class CursosApplication implements CommandLineRunner {
 
 		User test1 = new User("TestTransactional1", "TestTransactional1@test.com", LocalDate.now());
 		User test2 = new User("TestTransactional2", "TestTransactional2@test.com", LocalDate.now());
-		User test3 = new User("TestTransactional3", "TestTransactional3@test.com", LocalDate.now());
+		// Este tiene la duplicidad del email (Error).
+		User test3 = new User("TestTransactional3", "TestTransactional1@test.com", LocalDate.now());
 		User test4 = new User("TestTransactional4", "TestTransactional4@test.com", LocalDate.now());
 
 		List<User> users = List.of(test1, test2, test3, test4);
 
-		userService.saveTransactional(users);
+		try {
+			userService.saveTransactional(users);
+		}catch (Exception e){
+			LOGGER.error(e);
+		}
 
 		userService.getAllUsers()
 			.forEach(user -> LOGGER.info("Este es el usuario dentro del metodo transaccional: " + user));
