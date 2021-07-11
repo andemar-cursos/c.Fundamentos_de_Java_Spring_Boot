@@ -10,6 +10,7 @@ import com.cursos.andemar.cursos.pojo.UserPojo;
 import com.cursos.andemar.cursos.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -77,7 +78,7 @@ public class CursosApplication implements CommandLineRunner {
 		User user3 = new User("Ran", "test@Ran.com", LocalDate.of(2020, 07, 20));
 		User user4 = new User("Rena", "test@Rena.com", LocalDate.of(2020, 06, 12));
 		User user5 = new User("Nagisa", "test@Nagisa.com", LocalDate.of(2020, 03, 30));
-		User user6 = new User("Asuna", "test@Asuna.com", LocalDate.of(2020, 03, 20));
+		User user6 = new User("Sinon", "test@Asuna.com", LocalDate.of(2020, 03, 20));
 		User user7 = new User("Sinon", "test@Sinon.com", LocalDate.of(2020, 01, 20));
 		User user8 = new User("Alice", "test@Alice.com", LocalDate.of(2020, 12, 20));
 		User user9 = new User("Tyese", "test@Tyese.com", LocalDate.of(2020, 11, 20));
@@ -86,11 +87,30 @@ public class CursosApplication implements CommandLineRunner {
 
 		list.stream().forEach(userRepository::save);
 
-		userRepository.findByName("Andemar")
+		/*userRepository.findByName("Andemar")
 			.forEach(user -> LOGGER.info("Usuario con query method: " + user));
 
 		userRepository.findByEmailAndName("test@mashiro.com", "Mashiro")
 				.ifPresent(LOGGER::info);
+
+		userRepository.findByNameLike("%R%")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario findByNameLike " + user));
+
+		userRepository.findByNameOrEmail(null, "test@mashiro.com")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario findByNameOrEmail " + user));
+
+
+		userRepository.findByBirthDateBetween(LocalDate.of(2021, 03, 1), LocalDate.of(2021, 06, 1))
+			.stream()
+			.forEach(user -> LOGGER.info("Usuario findByBirthDateBetween " + user));
+
+		userRepository.findByNameLikeOrderByIdDesc("%Sinon%")
+				.forEach(user -> LOGGER.info("Usuario findByNameLikeOrderByIdDesc: " + user));*/
+
+		userRepository.findByNameContainingOrderByIdDesc("Sinon")
+				.forEach(user -> LOGGER.info("Usuario findByNameContainingOrderByIdDesc: " + user));
 	}
 
 
